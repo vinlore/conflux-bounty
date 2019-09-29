@@ -24,6 +24,7 @@ const ModalWrapper = styled.div`
   max-height: 90vh;
   max-width: 90vw;
   transform: translate(-50%, -50%) !important;
+  box-shadow: rgba(0, 0, 0, 0.12) 2px 4px 20px;
 
   ${props =>
     props.mobile &&

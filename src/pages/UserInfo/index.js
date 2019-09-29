@@ -9,6 +9,7 @@ import { StyledWrapper, flexCenterMiddle } from '../../globalStyles/common';
 import Message from '../../components/Message';
 import { notice } from '../../components/Message/notice';
 import Tooltip from '../../components/Tooltip';
+import RewardExplain from './rewardExplain';
 import imgMybountys from '../../assets/iconfont/my-bountys.svg';
 import imgMySolutions from '../../assets/iconfont/my-solutions.svg';
 import imgMyLikes from '../../assets/iconfont/my-likes.svg';
@@ -278,8 +279,31 @@ const Wrapper = styled(StyledWrapper)`
         width: 100%;
         font-weight: 500;
       }
+      .explain-toggle {
+        position: relative;
+        padding: 0;
+      }
+      .explain-toggle::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: 0;
+        width: 100%;
+        height: 200%;
+      }
     `};
 `;
+
+const RewardExplainContent = () => (
+  <div>
+    {i18nTxt('userinfo.rewardsExplain')}
+    <div className="learn-more">
+      <a rel="noopener noreferrer" target="_blank" href="https://wallet.confluxscan.io/about">
+        {i18nTxt('userInfo.viewMore')} &gt;
+      </a>
+    </div>
+  </div>
+);
 
 // eslint-disable-next-line react/prefer-stateless-function
 class UserInfo extends Component {
@@ -381,16 +405,21 @@ class UserInfo extends Component {
                 <div className="withdraw-left-1">
                   <span style={{ verticalAlign: 'middle' }}> {i18nTxt('Bounty Rewards')}</span>
 
-                  <Tooltip tipSpan={<i className="question"></i>}>
-                    <div>
-                      {i18nTxt('userinfo.rewardsExplain')}
-                      <div>
-                        <a rel="noopener noreferrer" target="_blank" href="https://wallet.confluxscan.io/about">
-                          {i18nTxt('userInfo.viewMore')} &gt;
-                        </a>
-                      </div>
-                    </div>
-                  </Tooltip>
+                  {mobile ? (
+                    <button
+                      type="button"
+                      className="explain-toggle"
+                      onClick={() => {
+                        updateUserAccount({ showRewardExplainDialog: true });
+                      }}
+                    >
+                      <i className="question"></i>
+                    </button>
+                  ) : (
+                    <Tooltip tipSpan={<i className="question"></i>}>
+                      <RewardExplainContent />
+                    </Tooltip>
+                  )}
                 </div>
                 <div className="withdraw-left-2">
                   <div className="withdraw-money">
@@ -466,6 +495,11 @@ class UserInfo extends Component {
             </button>
           </div>
         </Wrapper>
+        {mobile ? (
+          <RewardExplain>
+            <RewardExplainContent />
+          </RewardExplain>
+        ) : null}
         <Withdraw />
       </React.Fragment>
     );
@@ -489,6 +523,7 @@ function mapStateToProps(state) {
       ...state.head,
       user: state.head.user || {},
     },
+    userAccount: state.userInfo.userAccount,
     screenWidth: state.common.screenWidth,
   };
 }

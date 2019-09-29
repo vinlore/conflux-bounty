@@ -15,6 +15,7 @@ import {
 
 const initState = {
   showWithdrawDialog: false,
+  showRewardExplainDialog: false,
 
   withDrawAmount: '',
   withDrawAmountErr: '',

@@ -45,7 +45,7 @@ const ToolTips = {
     }
     .tooltip-panel {
       transform: translateY(-50%);
-      left: 30px;
+      left: 29px;
       top: 50%;
     }
   `,
