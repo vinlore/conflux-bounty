@@ -180,6 +180,9 @@ class PageHead extends Component {
       getUnreadMessageCount();
     }
 
+    this.updatescreenWidth();
+    window.addEventListener('resize', this.updatescreenWidth);
+
     const pageWrapper = document.getElementById('page-wrapper');
     this.onScroll = () => {
       const { homeSticky } = this.state;
@@ -215,6 +218,10 @@ class PageHead extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updatescreenWidth);
+  }
+
   createBounty = () => {
     const { history } = this.props;
 
@@ -223,6 +230,12 @@ class PageHead extends Component {
     } else {
       history.push('/create-bounty');
     }
+  };
+
+  updatescreenWidth = () => {
+    const { updateCommon } = this.props;
+    const screenWidth = window && window.screen ? window.screen.width : 0;
+    updateCommon({ screenWidth });
   };
 
   render() {

@@ -190,6 +190,95 @@ const Wrapper = styled(StyledWrapper)`
     vertical-align: middle;
     margin-left: 5px;
   }
+
+  ${props =>
+    props.mobile &&
+    `
+      font-family: SF Pro Display;
+      border-radius: 0;
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 0;
+
+      .user-background {
+        background: radial-gradient(66.13% 120.18% at 0% 0%, #37A2C4 0%, #1587AB 100%);
+        height: 220px;
+        position: absolute;
+        left: 0;
+        top: 56px;
+        z-index: 0;
+        width: 100%;
+      }
+      .user {
+        color: #FFFFFF;
+        position: absolute;
+        z-index: 2;
+        top: -76px;
+        width: 100%;
+        left: 0;
+        padding: 0 20px;
+      }
+      .user .img-wrap {
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.2);
+        height: 100px;
+        width: 100px;
+      }
+      .user .user-info {
+        margin-bottom: 30px;
+      }
+      .user .user-info .user-name {
+        font-weight: 500;
+      }
+      .user .iconmail {
+        color: white;
+        right: 4px;
+      }
+      .user .iconmail-dot {
+        right: -8px;
+        font-size: 14px;
+      }
+      .mobile-container {
+        margin-top: 90px;
+        border-radius: 12px;
+        box-shadow: 1px 2px 12px rgba(0, 0, 0, 0.12);
+        padding: 20px;
+        z-index: 1;
+        position: relative;
+        background: #FFFFFF;
+      }
+      .withdraw-wrap {
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+      .withdraw-money {
+        text-align: center;
+      }
+      .withdraw-money:first-child {
+        border-right: 1px solid #EBEDED;
+      }
+      .withdraw-money span {
+        font-size: 14px;
+      }
+      .withdraw-right {
+        width: 100%;
+        margin-top: 20px;
+      }
+      .withdraw-right button {
+        width: 100%;
+        color: #22B2D6;
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+      .msg-notice .message {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+      }
+      .signout button {
+        width: 100%;
+        font-weight: 500;
+      }
+    `};
 `;
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -255,86 +344,90 @@ class UserInfo extends Component {
   };
 
   render() {
-    const { history, head, updateUserAccount } = this.props;
+    const { history, head, updateUserAccount, screenWidth } = this.props;
+    const mobile = screenWidth < 376;
     return (
       <React.Fragment>
-        <Wrapper>
-          <div className="user">
-            <div className={cx('img-wrap', { withimg: head.user.photoUrl })}>
-              <div
-                className="avatar"
-                style={{
-                  backgroundImage: `url(${head.user.photoUrl || imgDefaultAvatar})`,
-                }}
-              />
-              <div className="img-edit">
-                <input type="file" className="avatar-uploader" accept="image/jpeg,image/png,image/gif" onChange={this.onAvatarLoad} />
-                {i18nTxt('EDIT')}
-              </div>
-            </div>
-
-            <div className="user-info">
-              <div className="user-name">{head.user.nickname}</div>
-              <div className="user-email">{head.user.email}</div>
-            </div>
-
-            <Link to="/messages">
-              <span className="iconmail"></span>
-              {head.messageCount ? <div className="iconmail-dot">{head.messageCount}</div> : <div></div>}
-            </Link>
-          </div>
-
-          <div className="withdraw-wrap">
-            <div className="withdraw-left">
-              <div className="withdraw-left-1">
-                <span style={{ verticalAlign: 'middle' }}> {i18nTxt('Bounty Rewards')}</span>
-
-                <Tooltip tipSpan={<i className="question"></i>}>
-                  <div>
-                    {i18nTxt('userinfo.rewardsExplain')}
-                    <div>
-                      <a rel="noopener noreferrer" target="_blank" href="https://wallet.confluxscan.io/about">
-                        {i18nTxt('userInfo.viewMore')} &gt;
-                      </a>
-                    </div>
-                  </div>
-                </Tooltip>
-              </div>
-              <div className="withdraw-left-2">
-                <div className="withdraw-money">
-                  <span>{i18nTxt('Available (FC)')}</span>
-                  <strong>{head.fansCoin}</strong>
-                </div>
-                <div className="withdraw-money">
-                  <span>{i18nTxt('Locked (FC)')}</span>
-                  <strong>{head.fansCoinLocked}</strong>
+        <Wrapper mobile={mobile}>
+          {mobile ? <div className="user-background" /> : null}
+          <div className="mobile-container">
+            <div className="user">
+              <div className={cx('img-wrap', { withimg: head.user.photoUrl })}>
+                <div
+                  className="avatar"
+                  style={{
+                    backgroundImage: `url(${head.user.photoUrl || imgDefaultAvatar})`,
+                  }}
+                />
+                <div className="img-edit">
+                  <input type="file" className="avatar-uploader" accept="image/jpeg,image/png,image/gif" onChange={this.onAvatarLoad} />
+                  {i18nTxt('EDIT')}
                 </div>
               </div>
-            </div>
 
-            <div className="withdraw-right">
-              <button
-                onClick={() => {
-                  updateUserAccount({
-                    showWithdrawDialog: true,
-                  });
-                }}
-                className="btn default waves-effect waves-light"
-                type="button"
-              >
-                {i18nTxt('WITHDRAW')}
-              </button>
-              <Link to="/account-history" className="default">
-                {i18nTxt('HISTORY')}
+              <div className="user-info">
+                <div className="user-name">{head.user.nickname}</div>
+                <div className="user-email">{head.user.email}</div>
+              </div>
+
+              <Link to="/messages">
+                <span className="iconmail"></span>
+                {head.messageCount ? <div className="iconmail-dot">{head.messageCount}</div> : <div></div>}
               </Link>
             </div>
+
+            <div className="withdraw-wrap">
+              <div className="withdraw-left">
+                <div className="withdraw-left-1">
+                  <span style={{ verticalAlign: 'middle' }}> {i18nTxt('Bounty Rewards')}</span>
+
+                  <Tooltip tipSpan={<i className="question"></i>}>
+                    <div>
+                      {i18nTxt('userinfo.rewardsExplain')}
+                      <div>
+                        <a rel="noopener noreferrer" target="_blank" href="https://wallet.confluxscan.io/about">
+                          {i18nTxt('userInfo.viewMore')} &gt;
+                        </a>
+                      </div>
+                    </div>
+                  </Tooltip>
+                </div>
+                <div className="withdraw-left-2">
+                  <div className="withdraw-money">
+                    <span>{i18nTxt('Available (FC)')}</span>
+                    <strong>{head.fansCoin}</strong>
+                  </div>
+                  <div className="withdraw-money">
+                    <span>{i18nTxt('Locked (FC)')}</span>
+                    <strong>{head.fansCoinLocked}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="withdraw-right">
+                <button
+                  onClick={() => {
+                    updateUserAccount({
+                      showWithdrawDialog: true,
+                    });
+                  }}
+                  className="btn default waves-effect waves-light"
+                  type="button"
+                >
+                  {i18nTxt('WITHDRAW')}
+                </button>
+                <Link to="/account-history" className="default">
+                  {i18nTxt('HISTORY')}
+                </Link>
+              </div>
+            </div>
+
+            <div className="msg-notice">
+              <Message type="message-notice-light">{i18nTxt('Withdrawal are processed 12PM CST every Tuesday')}</Message>
+            </div>
           </div>
 
-          <div className="msg-notice">
-            <Message type="message-notice-light">{i18nTxt('Withdrawal are processed 12PM CST every Tuesday')}</Message>
-          </div>
-
-          <div className="line-sep" />
+          {mobile ? null : <div className="line-sep" />}
 
           <div className="settings">
             <Link className="settings-item" to="/my-bounty">
@@ -387,6 +480,7 @@ UserInfo.propTypes = {
   head: PropTypes.objectOf({
     id: PropTypes.string,
   }).isRequired,
+  screenWidth: PropTypes.number.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -395,6 +489,7 @@ function mapStateToProps(state) {
       ...state.head,
       user: state.head.user || {},
     },
+    screenWidth: state.common.screenWidth,
   };
 }
 
