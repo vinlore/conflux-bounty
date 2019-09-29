@@ -63,6 +63,32 @@ const WithdrawContent = styled.div`
     cursor: pointer;
     outline: none;
   }
+
+  ${props =>
+    props.mobile &&
+    `
+      width: 100%;
+      padding: 16px;
+      font-family: SF Pro Display;
+
+      .close {
+        right: 10px;
+      }
+      .input-field > input:not(.browser-default) {
+        height: 44px;
+        font-size: 14px;
+      }
+      .input-field > label {
+        transform: translateY(12px);
+        font-size: 14px;
+      }
+      .withdraw-emailcode > button {
+        height: 44px;
+        margin-left: 8px;
+        margin-top: 5px;
+        font-weight: 500;
+      }
+    `};
 `;
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -75,7 +101,8 @@ class Withdraw extends Component {
   }
 
   render() {
-    const { userAccount, updateUserAccount, head, getCode, doWithdraw } = this.props;
+    const { userAccount, updateUserAccount, head, getCode, doWithdraw, screenWidth } = this.props;
+    const mobile = screenWidth < 376;
     return (
       <Modal
         show={userAccount.showWithdrawDialog}
@@ -84,8 +111,9 @@ class Withdraw extends Component {
             showWithdrawDialog: false,
           });
         }}
+        mobile={mobile}
       >
-        <WithdrawContent>
+        <WithdrawContent mobile={mobile}>
           <button
             className="material-icons close"
             onClick={() => {
@@ -194,12 +222,14 @@ Withdraw.propTypes = {
   }).isRequired,
   getCode: PropTypes.func.isRequired,
   doWithdraw: PropTypes.func.isRequired,
+  screenWidth: PropTypes.number.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     head: state.head,
     userAccount: state.userInfo.userAccount,
+    screenWidth: state.common.screenWidth,
   };
 }
 

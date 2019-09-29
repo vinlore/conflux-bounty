@@ -24,6 +24,21 @@ const ModalWrapper = styled.div`
   max-height: 90vh;
   max-width: 90vw;
   transform: translate(-50%, -50%) !important;
+
+  ${props =>
+    props.mobile &&
+    `
+      width: 100%;
+      max-width: 100%;
+      top: auto;
+      left: 0;
+      bottom: 0;
+      transform: none !important;
+      z-index: 999999;
+      max-height: none;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    `};
 `;
 
 class ModalComp extends PureComponent {
@@ -43,11 +58,11 @@ class ModalComp extends PureComponent {
   }
 
   render() {
-    const { children, show, showOverlay } = this.props;
+    const { children, show, showOverlay, mobile } = this.props;
     if (show) {
       return (
         <React.Fragment>
-          <ModalWrapper>
+          <ModalWrapper mobile={mobile}>
             <React.Fragment>{children}</React.Fragment>
           </ModalWrapper>
           {showOverlay && <Overlay />}
@@ -64,11 +79,13 @@ ModalComp.propTypes = {
   show: PropTypes.bool.isRequired,
   showOverlay: PropTypes.bool,
   onEsc: PropTypes.func,
+  mobile: PropTypes.bool,
 };
 
 ModalComp.defaultProps = {
   showOverlay: true,
   onEsc: () => {},
+  mobile: false,
 };
 
 export default ModalComp;
