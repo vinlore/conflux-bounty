@@ -12,12 +12,14 @@ import BackHeadDiv from '../../components/BackHeadDiv';
 import { i18nTxt, fmtToDay, getQuery, commonPropTypes, htmlsafe, notice, auth, getStatus, downLink, renderAny } from '../../utils';
 import { getCategory } from '../../utils/api';
 import { updateShare } from '../../components/Share/action';
+import Select from '../../components/Select';
 import PhotoImg from '../../components/PhotoImg';
 import UserBack from '../../assets/iconfont/user-back.svg';
 import { BOUNTY_STATUS_ENUM } from '../../constants';
 import ViewSolution from '../Solution/viewsolution';
 import sortImg from '../../assets/iconfont/sort.svg';
 import Tooltip from '../../components/Tooltip';
+import media from '../../globalStyles/media';
 
 const Wrapper = styled(StyledWrapper)`
   padding: 40px;
@@ -179,6 +181,9 @@ const Wrapper = styled(StyledWrapper)`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .share-copy {
+      display: none;
+    }
   }
 
   &.comment {
@@ -254,6 +259,78 @@ const Wrapper = styled(StyledWrapper)`
     margin-top: 20px;
     text-align: center;
   }
+
+  ${media.mobile`
+    padding: 20px 12px;
+    h1 {
+      font-size: 24px;
+      line-height: 24px;
+      margin-bottom: 20px;
+    }
+    .bounty-category {
+      padding-top: 20px;
+    }
+    .reward {
+      margin: 12px 0;
+      color: #22B2D6;
+      font-weight: 500;
+    }
+    .attachment-line img {
+      width: 100%;
+    }
+    .submission-sort-item {
+      display: none;
+    }
+    .submission-sort-select > .labelInput {
+      border: 0;
+      &:focus {
+        border: 0;
+      }
+    }
+    .solution-item {
+      justify-content: space-between;
+      .solution-item-left {
+        flex-grow: 1;
+        max-width: 200px;
+        > span {
+          max-width: 180px;
+        }
+      }
+      .solution-item-descwrap {
+        display: none;
+      }
+      > a {
+        margin-left: 10px;
+      }
+    }
+    .solution-bottom {
+      justify-content: center;
+      flex-wrap: wrap;
+      button {
+        padding: 0;
+        margin: 0;
+        &:first-of-type {
+          margin-right: 20px;
+          .material-icons.like {
+            color: #F09C3A;
+            & ~ span {
+              color: #F09C3A;
+            }
+          }
+        }
+        &.share-qr {
+          display: none;
+        }
+        &.share-copy {
+          display: inline-block;
+        }
+      }
+      > a.btn {
+        width: 100%;
+        margin-top: 40px;
+      }
+    }
+  `}
 `;
 
 const RewardDiv = styled.div`
@@ -288,6 +365,10 @@ class ViewBounty extends Component {
     super(...args);
     const query = getQuery();
     this.query = query;
+    this.state = {
+      sortType: 'time_asc',
+    };
+    this.setSortType = this.setSortType.bind(this);
   }
 
   componentDidMount() {
@@ -306,9 +387,31 @@ class ViewBounty extends Component {
     }
   }
 
+  setSortType = sort => {
+    this.setState({
+      sortType: sort,
+    });
+  };
+
   render() {
     const { props } = this;
     const { viewBounty, sendLike, updateView, sendComment, getCommentList, getSolutionList, user, history } = this.props;
+    const { sortType } = this.state;
+
+    const sortOptions = [
+      {
+        label: i18nTxt('Time (Early Listed)'),
+        value: 'time_asc',
+      },
+      {
+        label: i18nTxt('Time (Newly Listed)'),
+        value: 'time_desc',
+      },
+      {
+        label: i18nTxt('Likes (More to Less)'),
+        value: 'like_desc',
+      },
+    ];
 
     return (
       <React.Fragment>
@@ -440,6 +543,24 @@ class ViewBounty extends Component {
                 <span>{i18nTxt('Sort by Likes')}</span>
                 <img src={sortImg} className="sorticon" alt="sorticon" />
               </button>
+              <Select
+                {...{
+                  theme: 'submission-sort-select',
+                  label: i18nTxt('Sort by'),
+                  labelType: 'text',
+                  onSelect: v => {
+                    updateView({
+                      sortType: v.value,
+                    });
+                    this.setSortType(v.value);
+                    getSolutionList(1);
+                  },
+                  options: sortOptions,
+                  selected: {
+                    value: sortType,
+                  },
+                }}
+              />
             </div>
 
             {viewBounty.solutionList.map(solution => {
@@ -503,10 +624,26 @@ class ViewBounty extends Component {
               </button>
               <button
                 type="button"
+                className="share-qr"
                 onClick={() => {
                   props.updateShare({
                     show: true,
                     qrTxt: window.location.href,
+                  });
+                }}
+              >
+                <i className="share" />
+                <span>{i18nTxt('Share')}</span>
+              </button>
+              <button
+                type="button"
+                className="share-copy"
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  notice.show({
+                    content: i18nTxt('Link copied'),
+                    type: 'message-success',
+                    timeout: 3000,
                   });
                 }}
               >

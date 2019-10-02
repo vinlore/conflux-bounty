@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import media from '../../globalStyles/media';
 
 export const Wrapper = styled.div`
   font-size: 20px;
@@ -21,6 +22,20 @@ export const Wrapper = styled.div`
       text-decoration: none;
     }
   }
+
+  ${media.mobile`
+    padding: 12px 20px;
+    font-size: 16px;
+    line-height: 16px;
+    position: absolute;
+    padding-bottom: 30px;
+    
+    > a {
+      font-size: 16px;
+      line-height: 16px;
+      font-weight: 500;
+    }
+  `}
 `;
 
 export default function BackHeadDiv({ onClick, children }) {
