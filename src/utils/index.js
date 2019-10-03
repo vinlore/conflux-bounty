@@ -73,7 +73,7 @@ export const sendRequest = config => {
   }
   // eslint-disable-next-line no-use-before-define
   const accessToken = auth.getToken();
-  const reqPromise = superagent(reqType, `https://bounty.conflux-chain.org/api${config.url}`)
+  const reqPromise = superagent(reqType, `/api${config.url}`)
     .set({ ...config.headers, authorization: accessToken, 'X-SITE-LANG': siteLang })
     .query(config.query)
     .send(config.body)
