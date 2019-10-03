@@ -103,6 +103,9 @@ const Wrapper = styled(StyledWrapper)`
     }
     margin-right: 5px;
   }
+  .submission-sort-mobile-wrapper {
+    display: none;
+  }
   .solution-item-star {
     margin-left: 20px;
     display: flex;
@@ -175,7 +178,6 @@ const Wrapper = styled(StyledWrapper)`
   .solution-item:last-of-type {
     border-bottom: 1px solid #ebeded;
   }
-
   .solution-bottom {
     margin-top: 40px;
     display: flex;
@@ -283,13 +285,36 @@ const Wrapper = styled(StyledWrapper)`
     .attachment-line img {
       width: 100%;
     }
-    .submission-sort-item {
-      display: none;
-    }
-    .submission-sort-select > .labelInput {
-      border: 0;
-      &:focus {
-        border: 0;
+    .submission-sort-wrap {
+      margin-left: 0;
+      .submission-sort-item {
+        display: none;
+      }
+      .submission-sort-mobile-wrapper {
+        height: 14px;
+        color: #8E9394;
+        font-size: 14px;
+        line-height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .submission-sort-select {
+          > .labelInput {
+            font-size: 14px;
+            line-height: 14px;
+            border: 0;
+            padding-right: 24px;
+            &:focus {
+              border: 0;
+            }
+          }
+          > .caret {
+            fill: #8E9394;
+            right: 0;
+            top: 10px;
+          }
+        }
+        .
       }
     }
     .solution-item {
@@ -368,7 +393,7 @@ const Wrapper = styled(StyledWrapper)`
         display: block;
         font-size: 14px;
         line-height: 14px;
-        height: 46px
+        height: 26px
         padding: 0 0 0 16px;
       }
     }
@@ -605,24 +630,27 @@ class ViewBounty extends Component {
                 <span>{i18nTxt('Sort by Likes')}</span>
                 <img src={sortImg} className="sorticon" alt="sorticon" />
               </button>
-              <Select
-                {...{
-                  theme: 'submission-sort-select',
-                  label: i18nTxt('Sort by'),
-                  labelType: 'text',
-                  onSelect: v => {
-                    updateView({
-                      sortType: v.value,
-                    });
-                    this.setSortType(v.value);
-                    getSolutionList(1);
-                  },
-                  options: sortOptions,
-                  selected: {
-                    value: sortType,
-                  },
-                }}
-              />
+              <div className="submission-sort-mobile-wrapper">
+                <span>{i18nTxt('Sort by')}</span>
+                <Select
+                  {...{
+                    theme: 'submission-sort-select',
+                    label: i18nTxt('Sort by'),
+                    labelType: 'text',
+                    onSelect: v => {
+                      updateView({
+                        sortType: v.value,
+                      });
+                      this.setSortType(v.value);
+                      getSolutionList(1);
+                    },
+                    options: sortOptions,
+                    selected: {
+                      value: sortType,
+                    },
+                  }}
+                />
+              </div>
             </div>
 
             {viewBounty.solutionList.map(solution => {
