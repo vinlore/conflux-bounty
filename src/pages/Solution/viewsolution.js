@@ -67,6 +67,12 @@ const Wrapper = styled(StyledWrapper)`
           width: 90px;
         }
       }
+      .solution-user-name {
+        font-weight: 500;
+        text-align: left;
+        color: #171d1f;
+        margin-bottom: 5px;
+      }
     }
   }
   .solution-dots {
@@ -223,6 +229,9 @@ const Wrapper = styled(StyledWrapper)`
           display: flex;
           margin-bottom: 0;
           flex-direction: column-reverse;
+          .solution-user-name {
+            text-align: center;
+          }
           .solution-user-cfx {
             font-size: 16px;
             line-height: 16px;
@@ -548,17 +557,7 @@ class ViewSolution extends Component {
                 if (viewSolution.status === SOLUTION_STATUS_ENUM.FINISHED && viewSolution.bounty.status === BOUNTY_STATUS_ENUM.FINISHED) {
                   return (
                     <span className="solution-user">
-                      <div
-                        style={{
-                          fontWeight: 500,
-                          textAlign: 'left',
-                          color: '#171D1F',
-                          marginBottom: 5,
-                        }}
-                      >
-                        {' '}
-                        {viewSolution.user.nickname}
-                      </div>
+                      <div className="solution-user-name"> {viewSolution.user.nickname}</div>
                       <div className="solution-user-cfx">
                         <span>+{get(viewSolution, ['reward', 'fansCoin'], 0)}</span>
                         <span style={{ fontSize: 16, marginLeft: 3 }}>FC</span>
