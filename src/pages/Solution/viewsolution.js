@@ -8,6 +8,7 @@ import get from 'lodash/get';
 import * as actions from './action';
 import { commonPropTypes, renderAny, getStatusMileStone, i18nTxt, downLink } from '../../utils';
 import { StyledWrapper } from '../../globalStyles/common';
+import media from '../../globalStyles/media';
 // import Input from '../../components/Input';
 import Message from '../../components/Message';
 import PhotoImg from '../../components/PhotoImg';
@@ -193,6 +194,47 @@ const Wrapper = styled(StyledWrapper)`
       background-repeat: repeat-x;
     }
   }
+  ${media.mobile`
+    padding: 20px 12px;
+    .head > h1 {
+      font-size: 24px;
+      line-height: 24px;
+      font-weight: 600;
+    }
+    .subject {
+      font-size: 16px;
+      line-height: 16px;
+      margin: 40px 0 12px 0;
+      font-weight: bold;
+    }
+    .miltstone-wrap {
+      padding-top: 8px;
+    }
+    .solution-head-list {
+      margin-top: 18px;
+      .solution-head-content {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        .solution-user {
+          position: absolute;
+          bottom: -36px;
+          margin: 0;
+          display: flex;
+          margin-bottom: 0;
+          flex-direction: column-reverse;
+          .solution-user-cfx {
+            font-size: 16px;
+            line-height: 16px;
+            padding: 7px 16px;
+          }
+        }
+      }
+    }
+    .solution-dots {
+      margin-top: 45px;
+    }
+  `}
 `;
 
 const AddNoticeDiv = styled.div`
