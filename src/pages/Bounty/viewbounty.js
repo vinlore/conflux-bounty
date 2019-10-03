@@ -194,6 +194,9 @@ const Wrapper = styled(StyledWrapper)`
       margin-top: 20px;
     }
   }
+  .comment-total {
+    display: none;
+  }
   .comment-list {
     padding-top: 10px;
   }
@@ -206,6 +209,9 @@ const Wrapper = styled(StyledWrapper)`
       padding-top: 12px;
       padding-bottom: 12px;
       margin: 0;
+    }
+    > .comment-btn {
+      display: none;
     }
   }
   .comment-input-wrap {
@@ -254,7 +260,6 @@ const Wrapper = styled(StyledWrapper)`
       }
     }
   }
-
   .load-more-solution {
     margin-top: 20px;
     text-align: center;
@@ -328,6 +333,43 @@ const Wrapper = styled(StyledWrapper)`
       > a.btn {
         width: 100%;
         margin-top: 40px;
+      }
+    }
+    .comment-header {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-end;
+      > h1 {
+        margin: 0;
+        flex-grow: 1;
+      }
+      .comment-total {
+        display: block;
+        font-size: 14px;
+        line-height: 14px;
+        color: #8E9394;
+      }
+    }
+    .comment-send {
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      .comment-input-wrap {
+        flex: 1 0 80%;
+        > input {
+          font-size: 14px;
+          line-height: 14px;
+          border-right: 0;
+        }
+        .comment-btn {
+          display: none;
+        }
+      }
+      > .comment-btn {
+        display: block;
+        font-size: 14px;
+        line-height: 14px;
+        height: 46px
+        padding: 0 0 0 16px;
       }
     }
   `}
@@ -412,6 +454,26 @@ class ViewBounty extends Component {
         value: 'like_desc',
       },
     ];
+
+    const CommentButton = () => (
+      <button
+        type="button"
+        className="btn btnTextPrimary comment-btn"
+        onClick={() => {
+          if (!user.id) {
+            notice.show({
+              type: 'message-notice',
+              content: i18nTxt('please login first'),
+              timeout: 3 * 1000,
+            });
+            return;
+          }
+          sendComment();
+        }}
+      >
+        {i18nTxt('viewbounty.COMMENT')}
+      </button>
+    );
 
     return (
       <React.Fragment>
@@ -675,7 +737,10 @@ class ViewBounty extends Component {
         </Wrapper>
 
         <Wrapper className="comment">
-          <h1>{i18nTxt('Comments')}</h1>
+          <div className="comment-header">
+            <h1>{i18nTxt('Comments')}</h1>
+            <span className="comment-total">{`${viewBounty.commentTotal} ${i18nTxt('Comments')}`}</span>
+          </div>
           <div className="comment-list">
             <div
               className="comment-send"
@@ -695,24 +760,9 @@ class ViewBounty extends Component {
                   }}
                   style={{ marginLeft: 12 }}
                 />
-                <button
-                  type="button"
-                  className="btn btnTextPrimary"
-                  onClick={() => {
-                    if (!user.id) {
-                      notice.show({
-                        type: 'message-notice',
-                        content: i18nTxt('please login first'),
-                        timeout: 3 * 1000,
-                      });
-                      return;
-                    }
-                    sendComment();
-                  }}
-                >
-                  {i18nTxt('viewbounty.COMMENT')}
-                </button>
+                <CommentButton />
               </div>
+              <CommentButton />
             </div>
 
             <div style={{ marginTop: 20 }}>
