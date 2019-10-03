@@ -40,7 +40,6 @@ export const StyledWrapper = styled.div`
 
   ${media.mobile`
     position: relative;
-    top: 40px;
   `}
 `;
 

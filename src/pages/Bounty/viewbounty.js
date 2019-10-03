@@ -393,7 +393,8 @@ const Wrapper = styled(StyledWrapper)`
         display: block;
         font-size: 14px;
         line-height: 14px;
-        height: 26px
+        height: 14px;
+        margin-top: 12px;
         padding: 0 0 0 16px;
       }
     }
